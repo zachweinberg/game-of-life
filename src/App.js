@@ -1,12 +1,13 @@
 import React from 'react';
-import Text from './components/Text';
+import Heading from './components/Heading';
 import Game from './components/Game';
 
 const App = () => {
-  console.log('render app');
+  console.log('Render root app');
+
   return (
     <>
-      <Text>Conway's Game of Life</Text>
+      <Heading>Conway's Game of Life</Heading>
       <Game />
     </>
   );

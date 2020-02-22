@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
-const CELL_SIZE = 5;
+const CANVAS_HEIGHT = 600;
+const CANVAS_WIDTH = 600;
 
 const Grid = ({ cells }) => {
   const canvasRef = useRef();
@@ -10,7 +11,8 @@ const Grid = ({ cells }) => {
       for (let j = 0; j < cells[i].length; j++) {
         ctx.beginPath();
         ctx.fillStyle = cells[i][j] ? 'green' : 'white';
-        ctx.fillRect(i * CELL_SIZE, j * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        const cellSize = CANVAS_HEIGHT / cells.length;
+        ctx.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
       }
     }
   };
@@ -21,7 +23,7 @@ const Grid = ({ cells }) => {
     drawGrid(ctx);
   });
 
-  return <canvas ref={canvasRef} width="700px" height="700px" />;
+  return <canvas ref={canvasRef} width={`${CANVAS_WIDTH}px`} height={`${CANVAS_HEIGHT}px`} />;
 };
 
 export default Grid;

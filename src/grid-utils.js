@@ -19,7 +19,7 @@ export const generateNewCells = () => {
   for (let i = 0; i < NUM_ROWS; i++) {
     grid[i] = [];
     for (let j = 0; j < NUM_COLS; j++) {
-      grid[i][j] = Math.random() > 0.3;
+      grid[i][j] = Math.random() > 0.7;
     }
   }
 
@@ -38,7 +38,7 @@ export const generateNextCells = oldCells => {
         const newJ = j + rule[1];
 
         if (newI >= 0 && newI < oldCells.length && newJ >= 0 && newJ < oldCells[i].length) {
-          neighbors += oldCells[newI][newJ] ? 1 : 0;
+          neighbors += oldCells[newI][newJ] ? true : false;
         }
       });
 
