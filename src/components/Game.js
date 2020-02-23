@@ -1,39 +1,49 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import Grid from './Grid';
-import { generateNewCells, generateNextCells } from '../grid-utils';
+import Controls from './Controls';
+import { generateNewCells, generateNextGenCells } from '../grid-utils';
 
 const Game = () => {
   const [cells, setCells] = useState(generateNewCells());
   const [running, setRunning] = useState(false);
   const [generation, setGeneration] = useState(0);
+  const intervalTimer = useRef();
 
   const animateGrid = () => {
-    // if (!running) {
-    //   return;
-    // }
-
-    setCells(prevCells => generateNextCells(prevCells));
+    setCells(prevCells => generateNextGenCells(prevCells));
     setGeneration(oldGen => oldGen + 1);
-    setTimeout(animateGrid, 150);
   };
 
-  // const handleStatusChange = () => {
-  //   if (running) {
-  //     setRunning(false);
-  //   } else {
-  //     animateGrid();
-  //     setRunning(true);
-  //   }
-  // };
+  const startAnimation = () => {
+    if (!running) {
+      setRunning(true);
+      intervalTimer.current = setInterval(animateGrid, 150);
+    }
+  };
 
-  console.log('> Render game');
+  const stopAnimation = () => {
+    if (running) {
+      setRunning(false);
+      clearInterval(intervalTimer.current);
+    }
+  };
+
+  const reset = () => {
+    setCells(generateNewCells());
+    setGeneration(0);
+  };
 
   return (
     <GameWrapper>
+      <Controls
+        startAnimation={startAnimation}
+        stopAnimation={stopAnimation}
+        reset={reset}
+        generation={generation}
+      />
+      <StyledGeneration>Generation: {generation}</StyledGeneration>
       <Grid cells={cells} />
-      <button onClick={animateGrid}>{running ? 'Stop' : 'Start'}</button>
-      <span>gen: {generation}</span>
     </GameWrapper>
   );
 };
@@ -44,6 +54,10 @@ const GameWrapper = styled.div`
   justify-content: center;
   align-items: center;
   margin: 0 auto;
+`;
+
+const StyledGeneration = styled.span`
+  margin-bottom: 1rem;
 `;
 
 export default Game;

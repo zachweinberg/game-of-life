@@ -1,10 +1,7 @@
 import React from 'react';
-import Heading from './components/Heading';
-import Game from './components/Game';
+import { Game, Heading } from './components';
 
 const App = () => {
-  console.log('Render root app');
-
   return (
     <>
       <Heading>Conway's Game of Life</Heading>

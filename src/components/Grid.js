@@ -1,18 +1,27 @@
 import React, { useEffect, useRef } from 'react';
+import { ROW_SIZE } from '../grid-utils';
 
-const CANVAS_HEIGHT = 600;
-const CANVAS_WIDTH = 600;
+const CANVAS_HEIGHT = 500;
+const CANVAS_WIDTH = 500;
+const CELL_SIZE = CANVAS_WIDTH / ROW_SIZE;
 
 const Grid = ({ cells }) => {
   const canvasRef = useRef();
 
   const drawGrid = ctx => {
+    ctx.strokeStyle = '#333';
+
     for (let i = 0; i < cells.length; i++) {
-      for (let j = 0; j < cells[i].length; j++) {
-        ctx.beginPath();
-        ctx.fillStyle = cells[i][j] ? 'green' : 'white';
-        const cellSize = CANVAS_HEIGHT / cells.length;
-        ctx.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
+      for (let j = 0; j < cells.length; j++) {
+        const status = cells[i][j];
+
+        if (status) {
+          ctx.fillStyle = 'black';
+          ctx.fillRect(i * CELL_SIZE, j * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        } else {
+          ctx.fillStyle = 'white';
+          ctx.fillRect(i * CELL_SIZE, j * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        }
       }
     }
   };

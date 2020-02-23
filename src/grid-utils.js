@@ -1,58 +1,63 @@
-const NUM_ROWS = 100;
-const NUM_COLS = 100;
-
-const neighborRules = [
-  [-1, 0],
-  [1, 0],
-  [-1, -1],
-  [1, 1],
-  [-1, 1],
-  [1, -1],
-  [0, -1],
-  [0, 1]
-];
+export const ROW_SIZE = 100;
 
 // Generate a 2d array of randomized cells
 export const generateNewCells = () => {
-  const grid = [];
+  const grid = new Array(ROW_SIZE);
 
-  for (let i = 0; i < NUM_ROWS; i++) {
-    grid[i] = [];
-    for (let j = 0; j < NUM_COLS; j++) {
+  for (let i = 0; i < ROW_SIZE; i++) {
+    grid[i] = new Array(ROW_SIZE);
+    for (let j = 0; j < grid.length; j++) {
       grid[i][j] = Math.random() > 0.7;
     }
   }
-
   return grid;
 };
 
-export const generateNextCells = oldCells => {
-  const newCells = [...oldCells];
+// Count the 8 neighbors surrounding a single cell
+const countNeighbors = (grid, x, y) => {
+  let sum = 0;
 
-  for (let i = 0; i < oldCells.length; i++) {
-    for (let j = 0; j < oldCells[i].length; j++) {
-      let neighbors = 0;
+  const numberOfRows = grid.length;
+  const numberOfCols = grid[0].length;
 
-      neighborRules.forEach(rule => {
-        const newI = i + rule[0];
-        const newJ = j + rule[1];
-
-        if (newI >= 0 && newI < oldCells.length && newJ >= 0 && newJ < oldCells[i].length) {
-          neighbors += oldCells[newI][newJ] ? true : false;
-        }
-      });
-
-      // Overpopulation and underpopulation causes death
-      if (neighbors > 3 || neighbors < 2) {
-        newCells[i][j] = false;
-      }
-
-      // Dead and has 3 neighbors causes life
-      if (!oldCells[i][j] && neighbors === 3) {
-        newCells[i][j] = true;
+  for (let i = -1; i < 2; i++) {
+    for (let j = -1; j < 2; j++) {
+      const row = (x + i + numberOfRows) % numberOfRows;
+      const col = (y + j + numberOfCols) % numberOfCols;
+      if (grid[row][col]) {
+        sum++;
       }
     }
   }
 
-  return newCells;
+  if (grid[x][y]) {
+    sum--;
+  }
+
+  return sum;
+};
+
+// Generate a new copy of cells based on Game of Life rules
+export const generateNextGenCells = cells => {
+  // .....@SPREAD
+  const nextCells = new Array(cells.length);
+
+  for (let i = 0; i < cells.length; i++) {
+    nextCells[i] = new Array(cells.length);
+
+    for (let j = 0; j < nextCells[i].length; j++) {
+      const value = cells[i][j];
+
+      const neighbors = countNeighbors(cells, i, j);
+
+      if (!value && neighbors === 3) {
+        nextCells[i][j] = true;
+      } else if (value && (neighbors < 2 || neighbors > 3)) {
+        nextCells[i][j] = false;
+      } else {
+        nextCells[i][j] = value;
+      }
+    }
+  }
+  return nextCells;
 };
