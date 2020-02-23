@@ -15,7 +15,7 @@ const Grid = ({ cells }) => {
       for (let j = 0; j < cells.length; j++) {
         const status = cells[i][j];
 
-        if (status) {
+        if (status === 'ALIVE') {
           ctx.fillStyle = 'black';
           ctx.fillRect(i * CELL_SIZE, j * CELL_SIZE, CELL_SIZE, CELL_SIZE);
         } else {

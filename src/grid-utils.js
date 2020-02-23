@@ -7,7 +7,7 @@ export const generateNewCells = () => {
   for (let i = 0; i < ROW_SIZE; i++) {
     grid[i] = new Array(ROW_SIZE);
     for (let j = 0; j < grid.length; j++) {
-      grid[i][j] = Math.random() > 0.7;
+      grid[i][j] = Math.random() > 0.7 ? 'ALIVE' : 'DEAD';
     }
   }
 
@@ -25,13 +25,13 @@ const countNeighbors = (grid, x, y) => {
     for (let j = -1; j < 2; j++) {
       const row = (x + i + numberOfRows) % numberOfRows;
       const col = (y + j + numberOfCols) % numberOfCols;
-      if (grid[row][col]) {
+      if (grid[row][col] === 'ALIVE') {
         count++;
       }
     }
   }
 
-  if (grid[x][y]) {
+  if (grid[x][y] === 'ALIVE') {
     count--;
   }
 
@@ -46,17 +46,17 @@ export const generateNextGenCells = cells => {
     nextCells[i] = new Array(cells.length);
 
     for (let j = 0; j < nextCells[i].length; j++) {
-      const value = cells[i][j];
+      const status = cells[i][j];
 
       const numNeighbors = countNeighbors(cells, i, j);
 
       // Rules
-      if (!value && numNeighbors === 3) {
-        nextCells[i][j] = true;
-      } else if (value && (numNeighbors < 2 || numNeighbors > 3)) {
-        nextCells[i][j] = false;
+      if (status === 'DEAD' && numNeighbors === 3) {
+        nextCells[i][j] = 'ALIVE';
+      } else if (status === 'ALIVE' && (numNeighbors < 2 || numNeighbors > 3)) {
+        nextCells[i][j] = 'DEAD';
       } else {
-        nextCells[i][j] = value;
+        nextCells[i][j] = status;
       }
     }
   }
