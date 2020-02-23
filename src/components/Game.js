@@ -6,8 +6,8 @@ import { generateNewCells, generateNextGenCells } from '../grid-utils';
 
 const Game = () => {
   const [cells, setCells] = useState(generateNewCells());
-  const [running, setRunning] = useState(false);
   const [generation, setGeneration] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
   const intervalTimer = useRef();
 
   const animateGrid = () => {
@@ -16,15 +16,15 @@ const Game = () => {
   };
 
   const startAnimation = () => {
-    if (!running) {
-      setRunning(true);
+    if (!isRunning) {
+      setIsRunning(true);
       intervalTimer.current = setInterval(animateGrid, 150);
     }
   };
 
   const stopAnimation = () => {
-    if (running) {
-      setRunning(false);
+    if (isRunning) {
+      setIsRunning(false);
       clearInterval(intervalTimer.current);
     }
   };
@@ -41,6 +41,7 @@ const Game = () => {
         stopAnimation={stopAnimation}
         reset={reset}
         generation={generation}
+        isRunning={isRunning}
       />
       <StyledGeneration>Generation: {generation}</StyledGeneration>
       <Grid cells={cells} />

@@ -10,12 +10,13 @@ export const generateNewCells = () => {
       grid[i][j] = Math.random() > 0.7;
     }
   }
+
   return grid;
 };
 
 // Count the 8 neighbors surrounding a single cell
 const countNeighbors = (grid, x, y) => {
-  let sum = 0;
+  let count = 0;
 
   const numberOfRows = grid.length;
   const numberOfCols = grid[0].length;
@@ -25,21 +26,20 @@ const countNeighbors = (grid, x, y) => {
       const row = (x + i + numberOfRows) % numberOfRows;
       const col = (y + j + numberOfCols) % numberOfCols;
       if (grid[row][col]) {
-        sum++;
+        count++;
       }
     }
   }
 
   if (grid[x][y]) {
-    sum--;
+    count--;
   }
 
-  return sum;
+  return count;
 };
 
-// Generate a new copy of cells based on Game of Life rules
+// Generate a new copy of cells based on the Game of Life rules
 export const generateNextGenCells = cells => {
-  // .....@SPREAD
   const nextCells = new Array(cells.length);
 
   for (let i = 0; i < cells.length; i++) {
@@ -48,16 +48,18 @@ export const generateNextGenCells = cells => {
     for (let j = 0; j < nextCells[i].length; j++) {
       const value = cells[i][j];
 
-      const neighbors = countNeighbors(cells, i, j);
+      const numNeighbors = countNeighbors(cells, i, j);
 
-      if (!value && neighbors === 3) {
+      // Rules
+      if (!value && numNeighbors === 3) {
         nextCells[i][j] = true;
-      } else if (value && (neighbors < 2 || neighbors > 3)) {
+      } else if (value && (numNeighbors < 2 || numNeighbors > 3)) {
         nextCells[i][j] = false;
       } else {
         nextCells[i][j] = value;
       }
     }
   }
+
   return nextCells;
 };

@@ -1,11 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Controls = ({ startAnimation, stopAnimation, reset }) => {
+const Controls = ({ startAnimation, stopAnimation, reset, isRunning }) => {
   return (
     <StyledControls>
-      <StyledButton onClick={startAnimation}>Start</StyledButton>
-      <StyledButton onClick={stopAnimation}>Stop</StyledButton>
+      <StyledButton disabled={isRunning} onClick={startAnimation}>
+        Start
+      </StyledButton>
+      <StyledButton disabled={!isRunning} onClick={stopAnimation}>
+        Stop
+      </StyledButton>
       <StyledButton onClick={reset}>Reset</StyledButton>
     </StyledControls>
   );
@@ -21,12 +25,12 @@ const StyledButton = styled.button`
   font-size: 1.1rem;
   border-radius: 5px;
   border: none;
-  background-color: black;
+  background-color: ${props => (props.disabled ? '#bdbdbd' : '#000')};
   color: white;
   cursor: pointer;
   margin-right: 10px;
   &:hover {
-    background-color: #333;
+    background-color: ${props => (props.disabled ? '#bdbdbd' : '#333')};
   }
 `;
 
