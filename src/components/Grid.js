@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { ROW_SIZE } from '../grid-utils';
 
-const CANVAS_HEIGHT = 600;
-const CANVAS_WIDTH = 600;
+const CANVAS_HEIGHT = 500;
+const CANVAS_WIDTH = 500;
 const CELL_SIZE = CANVAS_WIDTH / ROW_SIZE;
 
 const Grid = ({ cells }) => {
